@@ -1,0 +1,53 @@
+#!/bin/bash
+
+#source <(curl -s http://fid.pw/spinner/) #spinner
+apikey='6WhNTqvgEitBDiLgkoe1h7WJQevGGcRW6wSIfiSeO2fnZBCeyZf61SnDrW0jgmym'
+projectname='testproject'
+sshport='64'
+region='blr1'
+imagename='ubuntu-18-04-x64'
+
+instance=$1
+function createproject
+{
+#List the projects in Digitalocean and if the project does not exist,create it.
+$instance context create my-super-project
+
+$instance context list
+}
+
+function createinstance
+{
+createproject
+#instancename=$1
+echo "Creating instance $instancename . Please wait.."
+#startspin
+instances=$($instance server create --image ubuntu-18.04 --type cx11 --name my-cool-server)
+echo "Instance $instancename created.Assigning instance to project $projectname."
+hcloud server list
+instanceip=$(echo $instances )
+instanceid=$(echo $instances )
+echo $instanceid >> instances.txt
+echo "$instancename assigned to $projectname with id $projectid"
+#echo ssh -p $sshport -o StrictHostKeyChecking=no -o
+ssh -p $sshport
+#UserKnownHostsFile=/dev/null -i ssh my-cool-server@"$instanceip"
+#ssh-keygen -b 4096
+ssh-keygen -t rsa
+#ssh my-cool-server@"$instanceip"
+for (( ; ; )) ;
+do
+ufw allow 22/tcp&& echo "SSH port opened..Proceeding.." && break || echo "SSH port closed..trying again..."
+#sleep 1s
+done
+}
+function delete
+{
+$instance server delete my-cool-server
+echo "deleted $1"
+}
+
+function list
+{
+$instance  server list
+}
